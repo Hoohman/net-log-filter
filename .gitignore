@@ -1,0 +1,74 @@
+# --- Compiled Binaries and Objects ---
+*.o
+*.obj
+*.out
+*.exe
+*.a
+*.lib
+*.so
+*.dll
+*.dylib
+
+# --- Build Directories ---
+[Bb]uild/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa]rm/
+[Aa]rm64/
+out/
+
+# --- CMake Generated Files ---
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps/
+
+# --- Visual Studio Artifacts ---
+.vs/
+*.sln
+*.vcxproj
+*.vcxproj.user
+*.vcxproj.filters
+*.db
+*.opendb
+*.pch
+*.idb
+*.ipch
+*.sdf
+*.suo
+*.ilk
+*.pdb
+
+# --- JetBrains IDEs ---
+.idea/
+cmake-build-*/
+
+# --- Visual Studio Code ---
+.vscode/
+.cache/
+
+# --- Xcode ---
+.AppleSampleCodePrecompiledHeader/
+DerivedData/
+*.moved-aside
+*.xcuserstate
+*.xcworkspace/
+
+# --- Dependency Managers ---
+vcpkg_installed/
+conanfile.txt.lock
+conan.lock
+
+# --- Logs and System Files ---
+*.log
+*.tlog
+*.lastbuildstate
+*.dump
+.DS_Store
+Thumbs.db
