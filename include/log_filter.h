@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
 #include <istream>
 #include <memory>
@@ -10,6 +11,9 @@
 #include <string_view>
 #include <utility>
 #include <vector>
+
+inline constexpr std::size_t kBufferSize = 1000; // max lines per processing batch
+inline constexpr std::size_t kMaxFilters = 20;   // max rules in CompositeFilter
 
 struct FilterRule {
   std::string type;
@@ -51,7 +55,7 @@ private:
   std::vector<std::unique_ptr<IFilter>> filters_;
 };
 
-std::unique_ptr<CompositeFilter>
+std::unique_ptr<IFilter>
 create_filter(const std::vector<FilterRule> &filters);
 
 void process_stream(std::istream &input, std::ostream &output,

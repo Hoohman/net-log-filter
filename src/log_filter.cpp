@@ -28,7 +28,7 @@ bool RangeFilter::match(uint32_t ip) const {
 
 bool CompositeFilter::match(uint32_t ip) const {
   for (size_t i = 0; i < filters_.size(); i++) {
-    if (bool filter = filters_[i]->match(ip); !filter) {
+    if (!filters_[i]->match(ip)) {
       return false;
     }
   }
@@ -39,10 +39,10 @@ void CompositeFilter::add_filter(std::unique_ptr<IFilter> filter) {
   filters_.push_back(std::move(filter));
 }
 
-std::unique_ptr<CompositeFilter>
-create_filter(const std::vector<FilterRule> &filters) {
-  if (filters.size() > 20) {
-    throw std::invalid_argument("Too many rules: max 20 allowed");
+std::unique_ptr<IFilter> create_filter(const std::vector<FilterRule> &filters) {
+  if (filters.size() > kMaxFilters) {
+    throw std::invalid_argument("Too many rules: max " +
+                                std::to_string(kMaxFilters) + " allowed");
   }
 
   auto composite = std::make_unique<CompositeFilter>();
@@ -75,13 +75,13 @@ create_filter(const std::vector<FilterRule> &filters) {
 void process_stream(std::istream &input, std::ostream &output,
                     const IFilter &filter) {
   std::vector<std::string> buffer;
-  buffer.reserve(1000);
+  buffer.reserve(kBufferSize);
   std::string line;
 
   while (std::getline(input, line)) {
     buffer.push_back(std::move(line));
 
-    if (buffer.size() == 1000) {
+    if (buffer.size() == kBufferSize) {
       process_buffer(buffer, filter, output);
       buffer.clear();
     }
@@ -196,7 +196,7 @@ void process_buffer(std::span<const std::string> buffer, const IFilter &filter,
                     std::ostream &output) {
   for (const auto &line : buffer) {
     size_t space = line.find(' ');
-    std::string_view ip_adr = line.substr(0, space);
+    std::string_view ip_adr = std::string_view{line}.substr(0, space);
 
     if (ip_adr.empty()) {
       continue;
